@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 export interface ForecastPeriod {
   label: string;
@@ -52,11 +52,13 @@ export interface StoreValue {
   isAdding: boolean;
   isLoading: boolean;
   refreshingId: number | null;
+  deletingId: number | null;
   error: unknown;
   select: (id: number | null) => void;
   setAdding: (isAdding: boolean) => void;
   create: (payload: CreateLocationPayload) => Promise<void>;
   refresh: (id: number) => Promise<void>;
+  remove: (id: number) => Promise<void>;
 }
 
 export interface ProviderProps {

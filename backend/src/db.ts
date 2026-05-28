@@ -1,10 +1,10 @@
-import { DatabaseSync } from 'node:sqlite';
-import { mkdirSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { and, desc, eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/sqlite-proxy';
-import { migrate } from 'drizzle-orm/sqlite-proxy/migrator';
-import { locations, type WeatherSnapshot } from './schema.js';
+import { DatabaseSync } from "node:sqlite";
+import { mkdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { and, desc, eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/sqlite-proxy";
+import { migrate } from "drizzle-orm/sqlite-proxy/migrator";
+import { locations, type WeatherSnapshot } from "./schema.js";
 
 export interface LocationRecord {
   id: number;
@@ -17,9 +17,9 @@ export interface LocationRecord {
 type LocationRow = typeof locations.$inferSelect;
 
 const defaultWeather: WeatherSnapshot = {
-  condition: 'Not refreshed',
+  condition: "Not refreshed",
   observed_at: null,
-  source: 'not-refreshed',
+  source: "not-refreshed",
   area: null,
   valid_period_text: null,
   temperature_c: null,
@@ -37,11 +37,12 @@ const defaultWeather: WeatherSnapshot = {
   daily_forecast: [],
 };
 
-const databasePath = process.env.DATABASE_PATH ?? join(process.cwd(), 'backend', 'weather.db');
+const databasePath =
+  process.env.DATABASE_PATH ?? join(process.cwd(), "backend", "weather.db");
 mkdirSync(dirname(databasePath), { recursive: true });
 
 const sqlite = new DatabaseSync(databasePath);
-sqlite.exec('PRAGMA journal_mode = WAL');
+sqlite.exec("PRAGMA journal_mode = WAL");
 const db = drizzle(sqliteCallback, { schema: { locations } });
 await migrate(
   db,
@@ -51,25 +52,34 @@ await migrate(
       if (trimmed) sqlite.exec(trimmed);
     }
   },
-  { migrationsFolder: join(process.cwd(), 'backend', 'drizzle') },
+  { migrationsFolder: join(process.cwd(), "backend", "drizzle") },
 );
 
 export async function listLocations(): Promise<LocationRecord[]> {
   return (
-    await db.select().from(locations).orderBy(desc(locations.createdAt), desc(locations.id)).all()
+    await db
+      .select()
+      .from(locations)
+      .orderBy(desc(locations.createdAt), desc(locations.id))
+      .all()
   ).map(rowToRecord);
 }
 
-export async function createLocation(latitude: number, longitude: number): Promise<LocationRecord> {
+export async function createLocation(
+  latitude: number,
+  longitude: number,
+): Promise<LocationRecord> {
   const duplicate = await db
     .select({ id: locations.id })
     .from(locations)
-    .where(and(eq(locations.latitude, latitude), eq(locations.longitude, longitude)))
+    .where(
+      and(eq(locations.latitude, latitude), eq(locations.longitude, longitude)),
+    )
     .get();
 
   if (duplicate) {
-    const error = new Error('Location already exists');
-    error.name = 'DuplicateLocationError';
+    const error = new Error("Location already exists");
+    error.name = "DuplicateLocationError";
     throw error;
   }
 
@@ -90,7 +100,11 @@ export async function createLocation(latitude: number, longitude: number): Promi
 }
 
 export async function getLocation(id: number): Promise<LocationRecord | null> {
-  const row = await db.select().from(locations).where(eq(locations.id, id)).get();
+  const row = await db
+    .select()
+    .from(locations)
+    .where(eq(locations.id, id))
+    .get();
   return row ? rowToRecord(row) : null;
 }
 
@@ -99,9 +113,23 @@ export async function updateWeather(
   weather: WeatherSnapshot,
 ): Promise<LocationRecord | null> {
   const columns = weatherToColumns(weather);
-  const row = await db.update(locations).set(columns).where(eq(locations.id, id)).returning().get();
+  const row = await db
+    .update(locations)
+    .set(columns)
+    .where(eq(locations.id, id))
+    .returning()
+    .get();
 
   return row ? rowToRecord(row) : null;
+}
+
+export async function deleteLocation(id: number): Promise<boolean> {
+  const row = await db
+    .delete(locations)
+    .where(eq(locations.id, id))
+    .returning({ id: locations.id })
+    .get();
+  return Boolean(row);
 }
 
 export async function resetStore(): Promise<void> {
@@ -164,20 +192,24 @@ function rowToRecord(row: LocationRow): LocationRecord {
 async function sqliteCallback(
   sql: string,
   params: unknown[],
-  method: 'run' | 'all' | 'values' | 'get',
+  method: "run" | "all" | "values" | "get",
 ): Promise<{ rows: unknown[] }> {
   const statement = sqlite.prepare(sql);
   const bindings = params as never[];
-  if (method === 'run') {
+  if (method === "run") {
     statement.run(...bindings);
     return { rows: [] };
   }
-  if (method === 'get') {
-    const row = statement.get(...bindings) as Record<string, unknown> | undefined;
-    return { rows: row ? Object.values(row) : (undefined as unknown as unknown[]) };
+  if (method === "get") {
+    const row = statement.get(...bindings) as
+      | Record<string, unknown>
+      | undefined;
+    return {
+      rows: row ? Object.values(row) : (undefined as unknown as unknown[]),
+    };
   }
   const rows = statement.all(...bindings) as Record<string, unknown>[];
-  if (method === 'values') {
+  if (method === "values") {
     return { rows: rows.map((row) => Object.values(row)) };
   }
   return { rows: rows.map((row) => Object.values(row)) };

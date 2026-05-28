@@ -1,18 +1,18 @@
-import type { SVGProps } from 'react';
+import type { SVGProps } from "react";
 
 interface IconProps {
   className?: string;
 }
 
 const base = {
-  fill: 'none',
-  stroke: 'currentColor',
+  fill: "none",
+  stroke: "currentColor",
   strokeWidth: 1.6,
-  strokeLinecap: 'round',
-  strokeLinejoin: 'round',
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
 } satisfies SVGProps<SVGSVGElement>;
 
-export function CloudIcon({ className = 'h-5 w-5' }: IconProps) {
+export function CloudIcon({ className = "h-5 w-5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M7 18h10a4 4 0 0 0 .8-7.92A6 6 0 0 0 6.1 11.4 3.5 3.5 0 0 0 7 18Z" />
@@ -20,7 +20,7 @@ export function CloudIcon({ className = 'h-5 w-5' }: IconProps) {
   );
 }
 
-export function SunIcon({ className = 'h-5 w-5' }: IconProps) {
+export function SunIcon({ className = "h-5 w-5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <circle cx="12" cy="12" r="4" />
@@ -29,7 +29,7 @@ export function SunIcon({ className = 'h-5 w-5' }: IconProps) {
   );
 }
 
-export function HomeIcon({ className = 'h-3 w-3' }: IconProps) {
+export function HomeIcon({ className = "h-3 w-3" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1Z" />
@@ -37,7 +37,7 @@ export function HomeIcon({ className = 'h-3 w-3' }: IconProps) {
   );
 }
 
-export function LocationIcon({ className = 'h-3 w-3' }: IconProps) {
+export function LocationIcon({ className = "h-3 w-3" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M12 2 4 6l4 4 4 12 4-12 4-4Z" />
@@ -45,7 +45,7 @@ export function LocationIcon({ className = 'h-3 w-3' }: IconProps) {
   );
 }
 
-export function PlusIcon({ className = 'h-4 w-4' }: IconProps) {
+export function PlusIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M12 5v14M5 12h14" />
@@ -53,7 +53,7 @@ export function PlusIcon({ className = 'h-4 w-4' }: IconProps) {
   );
 }
 
-export function SearchIcon({ className = 'h-4 w-4' }: IconProps) {
+export function SearchIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <circle cx="11" cy="11" r="7" />
@@ -62,7 +62,7 @@ export function SearchIcon({ className = 'h-4 w-4' }: IconProps) {
   );
 }
 
-export function RefreshIcon({ className = 'h-4 w-4' }: IconProps) {
+export function RefreshIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M3 12a9 9 0 0 1 15.5-6.3L21 8M21 4v4h-4M21 12a9 9 0 0 1-15.5 6.3L3 16M3 20v-4h4" />
@@ -70,7 +70,7 @@ export function RefreshIcon({ className = 'h-4 w-4' }: IconProps) {
   );
 }
 
-export function MoonIcon({ className = 'h-12 w-12' }: IconProps) {
+export function MoonIcon({ className = "h-12 w-12" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor">
       <circle cx="12" cy="12" r="10" opacity="0.85" />
@@ -82,7 +82,7 @@ export function MoonIcon({ className = 'h-12 w-12' }: IconProps) {
   );
 }
 
-export function CalendarIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function CalendarIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <rect x="4" y="5" width="16" height="15" rx="2" />
@@ -91,7 +91,7 @@ export function CalendarIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
   );
 }
 
-export function WindIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function WindIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M3 8h11a3 3 0 1 0-3-3M3 12h16a3 3 0 1 1-3 3M3 16h9" />
@@ -99,7 +99,7 @@ export function WindIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
   );
 }
 
-export function DropletIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function DropletIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11Z" />
@@ -107,7 +107,7 @@ export function DropletIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
   );
 }
 
-export function EyeIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function EyeIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
@@ -116,7 +116,7 @@ export function EyeIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
   );
 }
 
-export function GaugeIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function GaugeIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M4 16a8 8 0 1 1 16 0" />
@@ -125,7 +125,7 @@ export function GaugeIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
   );
 }
 
-export function ThermometerIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function ThermometerIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M14 14V5a2 2 0 1 0-4 0v9a4 4 0 1 0 4 0Z" />
@@ -133,7 +133,7 @@ export function ThermometerIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
   );
 }
 
-export function TrendIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function TrendIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M3 17 9 11l4 4 8-8M14 7h7v7" />
@@ -141,10 +141,18 @@ export function TrendIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
   );
 }
 
-export function CloseIcon({ className = 'h-3.5 w-3.5' }: IconProps) {
+export function CloseIcon({ className = "h-3.5 w-3.5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} {...base}>
       <path d="M6 6l12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+export function TrashIcon({ className = "h-3.5 w-3.5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3" />
     </svg>
   );
 }

@@ -1,16 +1,16 @@
-import { mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import request from 'supertest';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import type { WeatherSnapshot } from '../weather.js';
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import request from "supertest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import type { WeatherSnapshot } from "../weather.js";
 
 const weather: WeatherSnapshot = {
-  condition: 'Cloudy',
-  observed_at: '2026-05-04T00:00:00Z',
-  source: 'test',
-  area: 'Bishan',
-  valid_period_text: 'Now',
+  condition: "Cloudy",
+  observed_at: "2026-05-04T00:00:00Z",
+  source: "test",
+  area: "Bishan",
+  valid_period_text: "Now",
   temperature_c: 29,
   humidity_percent: 80,
   rainfall_mm: 0,
@@ -21,21 +21,28 @@ const weather: WeatherSnapshot = {
   uv_index: 7,
   psi_twenty_four_hourly: 42,
   pm25_one_hourly: 9,
-  air_quality_region: 'central',
-  forecast_periods: [{ label: 'Now', forecast: 'Cloudy' }],
-  daily_forecast: [{ date: '2026-05-04', forecast: 'Cloudy', temperature_low_c: 25, temperature_high_c: 32 }],
+  air_quality_region: "central",
+  forecast_periods: [{ label: "Now", forecast: "Cloudy" }],
+  daily_forecast: [
+    {
+      date: "2026-05-04",
+      forecast: "Cloudy",
+      temperature_low_c: 25,
+      temperature_high_c: 32,
+    },
+  ],
 };
 
-describe('locations API', () => {
+describe("locations API", () => {
   let tempDir: string;
-  let app: Awaited<ReturnType<typeof import('../server.js').createApp>>;
+  let app: Awaited<ReturnType<typeof import("../server.js").createApp>>;
 
   beforeAll(async () => {
-    tempDir = await mkdtemp(join(tmpdir(), 'weather-starter-test-'));
-    process.env.DATABASE_PATH = join(tempDir, 'weather.db');
-    process.env.LOG_LEVEL = 'silent';
+    tempDir = await mkdtemp(join(tmpdir(), "weather-starter-test-"));
+    process.env.DATABASE_PATH = join(tempDir, "weather.db");
+    process.env.LOG_LEVEL = "silent";
 
-    const { createApp } = await import('../server.js');
+    const { createApp } = await import("../server.js");
     app = await createApp({
       serveFrontend: false,
       enableRequestLogging: false,
@@ -51,9 +58,9 @@ describe('locations API', () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
-  it('refreshes weather when a location is created', async () => {
+  it("refreshes weather when a location is created", async () => {
     const response = await request(app)
-      .post('/api/locations')
+      .post("/api/locations")
       .send({ latitude: 1.35, longitude: 103.85 })
       .expect(201);
 
@@ -62,14 +69,37 @@ describe('locations API', () => {
       latitude: 1.35,
       longitude: 103.85,
       weather: {
-        condition: 'Cloudy',
-        area: 'Bishan',
+        condition: "Cloudy",
+        area: "Bishan",
         temperature_c: 29,
       },
     });
 
-    const listResponse = await request(app).get('/api/locations').expect(200);
+    const listResponse = await request(app).get("/api/locations").expect(200);
     expect(listResponse.body.locations).toHaveLength(1);
-    expect(listResponse.body.locations[0].weather.condition).toBe('Cloudy');
+    expect(listResponse.body.locations[0].weather.condition).toBe("Cloudy");
+  });
+
+  it("deletes a location", async () => {
+    const createResponse = await request(app)
+      .post("/api/locations")
+      .send({ latitude: 1.34, longitude: 103.84 })
+      .expect(201);
+
+    await request(app)
+      .delete(`/api/locations/${createResponse.body.id}`)
+      .expect(204);
+    await request(app)
+      .get(`/api/locations/${createResponse.body.id}`)
+      .expect(404);
+
+    const listResponse = await request(app).get("/api/locations").expect(200);
+    expect(listResponse.body.locations).not.toContainEqual(
+      expect.objectContaining({ id: createResponse.body.id }),
+    );
+  });
+
+  it("returns 404 when deleting a missing location", async () => {
+    await request(app).delete("/api/locations/99999").expect(404);
   });
 });
